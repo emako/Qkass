@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/add.png</file>
+        <file>res/cog.png</file>
+        <file>res/cross.png</file>
+        <file>res/delete.png</file>
+        <file>res/disk.png</file>
+        <file>res/disk_edit.png</file>
+        <file>res/door_in.png</file>
+        <file>res/folder.png</file>
+        <file>res/information.png</file>
+        <file>res/page_white_text.png</file>
+        <file>res/pause_green.png</file>
+        <file>res/play_green.png</file>
+        <file>res/tick.png</file>
+        <file>res/tick_light_blue.png</file>
+        <file>res/erase.png</file>
+        <file>res/paste_plain.png</file>
+        <file>res/github.ico</file>
+        <file>lisence.txt</file>
+        <file>res/github_large.png</file>
+        <file>res/github_medium.png</file>
+        <file>res/link.png</file>
+        <file>res/toggle_tag_hiding.png</file>
+        <file>res/zoom.png</file>
+        <file>res/zoom_actual.png</file>
+        <file>res/zoom_fit.png</file>
+        <file>res/zoom_in.png</file>
+        <file>res/zoom_out.png</file>
+        <file>res/tt_smallest.png</file>
+        <file>res/properties.png</file>
+        <file>res/text.ico</file>
+        <file>res/tt.ico</file>
+    </qresource>
+</RCC>
