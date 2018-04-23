@@ -68,12 +68,13 @@ void Ass2text::ass2Text(QString text)
             QStringList events = ass_text.split(ASS_TAG_COMMA);
             if(events.length() < (int)AssEvents::MaxEvent)
             {
+                /*メモリー溢れ回避*/
                 return;
             }
 
-            /* Length OK. */
-            ass_text = events.at((int)AssEvents::Text);
-            ass_text_out_list.append(stripTag(ass_text));
+            ass_text = stripTag(ass_text);
+            ass_text = getAssText(events);
+            ass_text_out_list.append(ass_text);
         }
     }
     ui->textEdit->setText(ass_text_out_list.join(QT_NOR_EOL));
@@ -99,7 +100,7 @@ QString Ass2text::getPathExt(QString path)
     }
     if(!ext.isEmpty())
     {
-        /* Add ext splite. */
+        /* 点が付いてる対応方式 */
         ext = QT_EXT_SPLITE + ext;
     }
     return ext;
@@ -146,6 +147,34 @@ void Ass2text::dropEvent(QDropEvent* event)
 
 void Ass2text::dragMoveEvent(QDragMoveEvent *event)
 {
-    event->pos();
+    event->pos();/*警告対応*/
     QT_PASS;
+}
+
+
+QString Ass2text::getAssText(QStringList events)
+{
+    QString text = QT_EMPTY;
+    if(events.length() < (int)AssEvents::MaxEvent)
+    {
+        /*一般的な字幕テキストではない*/
+        /*メモリー溢れ回避、何もしない*/
+        QT_PASS;
+    }
+    else if(events.length() == (int)AssEvents::MaxEvent)
+    {
+        /*一般的な字幕テキスト*/
+        text = events.at((int)AssEvents::Text);
+    }
+    else if(events.length() > (int)AssEvents::MaxEvent)
+    {
+        /*字幕テキストにカンマが付いてる場合*/
+        QStringList texts;
+        for(int i = (int)AssEvents::Text; i < events.length(); i++)
+        {
+            texts.append(events.at(i));
+        }
+        text = texts.join(ASS_TAG_COMMA);
+    }
+    return text;
 }

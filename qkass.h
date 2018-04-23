@@ -56,6 +56,7 @@ public:
     float calcTextLength(QString text);
     QString calcKassValue(QString start, QString end, float length);
     QString stripTag(QString text);
+    QString getAssText(QStringList events);
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;

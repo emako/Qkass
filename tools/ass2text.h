@@ -32,6 +32,7 @@ public:
     QString stripTag(QString text);
     QString getPathExt(QString path);
     void reloadInput(QString path);
+    QString getAssText(QStringList events);
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;

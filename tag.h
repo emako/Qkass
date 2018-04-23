@@ -72,7 +72,7 @@ static const char QT_STR_TAG_TEXT[]   = "{%1%2}%3";
 
 /*App info.*/
 static const char APP_NAME[]            = "Qkass";
-static const char  APP_VERSION[]        = "r1";
+static const char  APP_VERSION[]        = "r2";
 
 /*Tools info.*/
 static const char  APP_TOOLS_ASSTT[]    = "AssTt";
