@@ -72,6 +72,7 @@ QString AssTt::tt(int start_time, int end_time, int fx_time, QString tag1, QStri
         tags += QString(ASS_TAG_STR_TT).arg(ASS_TAG_TT).arg(QString::number(parm1)).arg(QString::number(parm2)).arg(tag2);
         change_tag = true;
     }
+    delete array;
     return tags;
 }
 

@@ -16,19 +16,38 @@ Qkass::~Qkass()
 
 void Qkass::setupUi(void)
 {
+    /*メモリー獲得、パラメータ初期化*/
     this->initParm();
+
+    /*翻訳ファイルを導入する*/
+    //this->setTrans();/*コメント：クラスがクリエイトされる前にする*/
+
+    /*ハイライトを設定する*/
     this->setHighlight();
+
+    /*フォント設定*/
     //this->setupUiFont();
+
+    /*ツールバー設定*/
     this->setupToolBar();
+
+    /*ステータスバー有効にする*/
     this->statusBar();
+}
+
+void Qkass::restart(void)
+{
+    qApp->exit(QT_RETCODE_RESTART);
 }
 
 void Qkass::initParm(void)
 {
     m_asstt = new AssTt();
     m_ass2text = new Ass2text();
+    m_ass2lrc = new Ass2lrc();
     m_input_highlighter = new Highlighter(ui->inputEdit->document());
     m_output_highlighter = new Highlighter(ui->outputEdit->document());
+    m_config = new QSettings(CONFIG_FILE, QSettings::IniFormat);
     m_clipboard = QApplication::clipboard();
 
     zoom_in_count = QT_INDEX_0;
@@ -204,6 +223,23 @@ void Qkass::setupToolBar(void)
     ass2textAction->setShortcuts(QKeySequence::UnknownKey);
     ass2textAction->setStatusTip(tr("Open Ass2text tool."));
     connect(ass2textAction, &QAction::triggered, this, Qkass::slotOpenAss2text);
+    /*ass2lrcAction*/
+    QAction *ass2lrcAction = new QAction(QIcon(":/res/trill_smallest.png"), tr("&Ass2lrc"), this);
+    ass2lrcAction->setShortcuts(QKeySequence::UnknownKey);
+    ass2lrcAction->setStatusTip(tr("Open Ass2lrc tool."));
+    connect(ass2lrcAction, &QAction::triggered, this, Qkass::slotOpenAss2lrc);
+    /*languageDefaultAction*/
+    QAction *languageDefaultAction = new QAction(QIcon(":/res/lang/def.ico"), tr("&Default"), this);
+    languageDefaultAction->setShortcuts(QKeySequence::UnknownKey);
+    connect(languageDefaultAction, &QAction::triggered, this, Qkass::slotLanguageDefault);
+    /*languageChineseAction*/
+    QAction *languageChineseAction = new QAction(QIcon(":/res/lang/chinese.ico"), tr("&Chinese"), this);
+    languageChineseAction->setShortcuts(QKeySequence::UnknownKey);
+    connect(languageChineseAction, &QAction::triggered, this, Qkass::slotLanguageChinese);
+    /*languageJapaneseAction*/
+    QAction *languageJapaneseAction = new QAction(QIcon(":/res/lang/japanese.ico"), tr("&Japanese"), this);
+    languageJapaneseAction->setShortcuts(QKeySequence::UnknownKey);
+    connect(languageJapaneseAction, &QAction::triggered, this, Qkass::slotLanguageJapanese);
 
     QMenu *menufile = ui->menuBar->addMenu(tr("&File"));
     menufile->addAction(openAction);
@@ -218,8 +254,15 @@ void Qkass::setupToolBar(void)
     menufile->addAction(exitAction);
     QMenu *menutools = ui->menuBar->addMenu(tr("&Tools"));
     menutools->addAction(assTtAction);
+    menutools->addAction(ass2lrcAction);
     menutools->addAction(ass2textAction);
     QMenu *menuoptions = ui->menuBar->addMenu(tr("&Options"));
+    QMenu *menulanguage = menuoptions->addMenu(QIcon(":/res/lang/lang_menu.png"), tr("&Language"));
+    menulanguage->addAction(languageDefaultAction);
+    menulanguage->addSeparator();
+    menulanguage->addAction(languageChineseAction);
+    menulanguage->addAction(languageJapaneseAction);
+    menuoptions->addSeparator();
     menuoptions->addAction(zoomInAction);
     menuoptions->addAction(zoomOutAction);
     menuoptions->addAction(zoomFitAction);
@@ -352,31 +395,6 @@ void Qkass::pasteText(void)
     ui->inputEdit->document()->setPlainText(m_clipboard->text());
 }
 
-QString Qkass::getSavePath(QString path)
-{
-    QString ext = getPathExt(path);
-    int index_ext = path.length() - ext.length();
-    QString file_name = path.left(index_ext);
-    file_name += ASS_TAG_SAVE_NAME;
-    return file_name + ext;
-}
-
-QString Qkass::getPathExt(QString path)
-{
-    QStringList exts = path.split(QT_EXT_SPLITE);
-    QString ext = QString(QT_EMPTY);
-    if(exts.length() != QT_INDEX_0)
-    {
-        ext = exts.at(exts.length() - QT_INDEX_1);
-    }
-    if(!ext.isEmpty())
-    {
-        /* Add ext splite. */
-        ext = QT_EXT_SPLITE + ext;
-    }
-    return ext;
-}
-
 void Qkass::saveDiskFile(void)
 {
     QString text = ui->outputEdit->toPlainText();
@@ -390,7 +408,7 @@ void Qkass::saveDiskFile(void)
         QMessageBox::information(this, "Warning", "Empty input path.");
         return;
     }
-    QString path = getSavePath(input_path);
+    QString path = Common::getPathOutput(input_path, ASS_TAG_SAVE_NAME);
     if(QFile::exists(path))
     {
         int result = QMessageBox::warning(this, "Warning", "Overwrite existing file?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -404,10 +422,10 @@ void Qkass::saveDiskFile(void)
     {
         QMessageBox::warning(this, "Warning","Can't open output file.", QMessageBox::Yes);
     }
-    QTextStream in(&file);
-    in<<text;
+    QTextStream out(&file);
+    out << text;
     file.close();
-    qDebug()<<"Saved file in: "+path;
+//    qDebug()<<"Saved file in: "+path;
 }
 
 void Qkass::saveAsDiskFile(void)
@@ -428,10 +446,10 @@ void Qkass::saveAsDiskFile(void)
     {
         QMessageBox::warning(this, "Warning","Can't open output file.", QMessageBox::Yes);
     }
-    QTextStream in(&file);
-    in<<text;
+    QTextStream out(&file);
+    out << text;
     file.close();
-    qDebug()<<"Saved file in: "+path;
+//    qDebug()<<"Saved file in: "+path;
 }
 
 void Qkass::on_copyBt_clicked()
@@ -450,16 +468,24 @@ void Qkass::on_clearBt_clicked()
     ui->outputEdit->clear();
 }
 
-void Qkass::on_exitBt_clicked()
+void Qkass::on_exitBt_clicked(bool clicked)
 {
     m_asstt->close();
     m_ass2text->close();
-    this->close();
+    m_ass2lrc->close();
+    if(clicked)
+    {
+        this->restart();
+    }
+    else
+    {
+        this->close();
+    }
 }
 
 void Qkass::closeEvent(QCloseEvent *event)
 {
-    event->accept();
+    event->accept();/*警告対応*/
     emit ui->exitBt->clicked();
 }
 
@@ -703,7 +729,6 @@ QString Qkass::callKass(QString rv_text)
                 at_skip_count = QT_INDEX_0;
             }
         }
-
         at_count++;
     }
     return text_k;
@@ -817,7 +842,7 @@ void Qkass::dropEvent(QDropEvent* event)
             droppath = url.toString();
             droppath = droppath.mid(QString(QT_FILE_PROTOCOL).length());
             qDebug()<<droppath;
-            QString ext = getPathExt(droppath).toLower();
+            QString ext = Common::getPathExt(droppath).toLower();
             if(ext == ASS_EXT_TYPE_A2 || ext == ASS_EXT_TYPE_B2 || ext == ASS_EXT_TYPE_C2)
             {
                 input_path = droppath;
@@ -871,7 +896,6 @@ void Qkass::slotOpenAssTt(void)
     {
         m_asstt->hide();
     }
-
 }
 
 void Qkass::slotOpenAss2text(void)
@@ -896,3 +920,59 @@ void Qkass::slotOpenAss2text(void)
     }
 }
 
+void Qkass::slotOpenAss2lrc(void)
+{
+    if(m_ass2lrc->isHidden())
+    {
+        m_ass2lrc->show();
+    }
+    else
+    {
+        m_ass2lrc->hide();
+    }
+}
+
+void Qkass::slotLanguageDefault(void)
+{
+    setConfig(CONFIG_PREFIX_COMMON, CONFIG_KEY_LANGUAGE, QLocale::English);
+    int result = QMessageBox::information(this, "Message", "Restart program?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if(result == QMessageBox::Yes)
+    {
+        emit ui->exitBt->clicked(true);
+    }
+}
+
+void Qkass::slotLanguageChinese(void)
+{
+    setConfig(CONFIG_PREFIX_COMMON, CONFIG_KEY_LANGUAGE, QLocale::Chinese);
+    int result = QMessageBox::information(this, "Message", "Restart program?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if(result == QMessageBox::Yes)
+    {
+        emit ui->exitBt->clicked(true);
+    }
+}
+
+void Qkass::slotLanguageJapanese(void)
+{
+    setConfig(CONFIG_PREFIX_COMMON, CONFIG_KEY_LANGUAGE, QLocale::Japanese);
+    int result = QMessageBox::information(this, "Message", "Restart program?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    if(result == QMessageBox::Yes)
+    {
+        emit ui->exitBt->clicked(true);
+    }
+}
+
+void Qkass::setConfig(const QString &prefix, const QString &key, const QVariant &value)
+{
+    m_config->beginGroup(prefix);
+    m_config->setValue(key, value);
+    m_config->endGroup();
+}
+
+QVariant Qkass::getConfig(const QString &prefix, const QString &key)
+{
+    m_config->beginGroup(prefix);
+    QVariant value = m_config->value(key);
+    m_config->endGroup();
+    return value;
+}

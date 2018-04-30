@@ -1,7 +1,7 @@
 #ifndef SYNTAX_HIGHLIGHTER_H
 #define SYNTAX_HIGHLIGHTER_H
 
-#include "tag.h"
+#include "com/tag.h"
 
 #include <QSyntaxHighlighter>
 #include <QTextCharFormat>

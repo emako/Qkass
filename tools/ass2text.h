@@ -1,7 +1,8 @@
 #ifndef ASS2TEXT_H
 #define ASS2TEXT_H
 
-#include "tag.h"
+#include "com/tag.h"
+#include "com/common.h"
 
 #include <QWidget>
 #include <QDebug>
@@ -29,13 +30,14 @@ public:
     void setupUi(void);
     void setText(QString text);
     void ass2Text(QString text);
-    QString stripTag(QString text);
-    QString getPathExt(QString path);
     void reloadInput(QString path);
-    QString getAssText(QStringList events);
+    QString stripTag(QString text);
+
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
+
+    static QString getAssText(QStringList events);
 
 private slots:
     void on_hideBt_clicked();

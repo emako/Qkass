@@ -89,23 +89,6 @@ void Ass2text::dragEnterEvent(QDragEnterEvent* event)
     }
 }
 
-
-QString Ass2text::getPathExt(QString path)
-{
-    QStringList exts = path.split(QT_EXT_SPLITE);
-    QString ext = QString(QT_EMPTY);
-    if(exts.length() != QT_INDEX_0)
-    {
-        ext = exts.at(exts.length() - QT_INDEX_1);
-    }
-    if(!ext.isEmpty())
-    {
-        /* 点が付いてる対応方式 */
-        ext = QT_EXT_SPLITE + ext;
-    }
-    return ext;
-}
-
 void Ass2text::reloadInput(QString path)
 {
     QFile file(path);
@@ -134,7 +117,7 @@ void Ass2text::dropEvent(QDropEvent* event)
             droppath = url.toString();
             droppath = droppath.mid(QString(QT_FILE_PROTOCOL).length());
             qDebug()<<droppath;
-            QString ext = getPathExt(droppath).toLower();
+            QString ext = Common::getPathExt(droppath).toLower();
             if(ext == ASS_EXT_TYPE_A2 || ext == ASS_EXT_TYPE_B2 || ext == ASS_EXT_TYPE_C2)
             {
                 reloadInput(droppath);
@@ -157,7 +140,7 @@ QString Ass2text::getAssText(QStringList events)
     QString text = QT_EMPTY;
     if(events.length() < (int)AssEvents::MaxEvent)
     {
-        /*一般的な字幕テキストではない*/
+        /*一般的な字幕テキストでない*/
         /*メモリー溢れ回避、何もしない*/
         QT_PASS;
     }

@@ -18,11 +18,13 @@ int CodeEditor::lineNumberAreaWidth()
 {
     int digits = 1;
     int max = qMax(1, blockCount());
-    while (max >= 10) {
+    while (max >= 10)
+    {
         max /= 10;
         ++digits;
     }
-    if(digits < 2){
+    if(digits < 2)
+    {
         digits = 2;
     }
     int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
@@ -85,8 +87,10 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
 
-    while (block.isValid() && top <= event->rect().bottom()) {
-        if (block.isVisible() && bottom >= event->rect().top()) {
+    while (block.isValid() && top <= event->rect().bottom())
+    {
+        if (block.isVisible() && bottom >= event->rect().top())
+        {
             QString number = QString::number(blockNumber + 1);
             painter.setPen(QColor((int)ColorLineNum::r, (int)ColorLineNum::g, (int)ColorLineNum::b));
             painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),

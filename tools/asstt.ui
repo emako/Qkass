@@ -331,7 +331,7 @@
      <item>
       <widget class="QTextEdit" name="textEdit">
        <property name="placeholderText">
-        <string>Show outpu form here ...</string>
+        <string>Show output form here ...</string>
        </property>
       </widget>
      </item>

@@ -29,20 +29,26 @@ SOURCES += \
     codeeditor.cpp \
     highlighter.cpp \
     tools/asstt.cpp \
-    tools/ass2text.cpp
+    tools/ass2text.cpp \
+    tools/ass2lrc.cpp \
+    com/common.cpp
 
 HEADERS += \
         qkass.h \
-    tag.h \
     codeeditor.h \
     highlighter.h \
     tools/asstt.h \
-    tools/ass2text.h
+    tools/ass2text.h \
+    tools/ass2lrc.h \
+    com/common.h \
+    com/tag.h \
+    com/config.h
 
 FORMS += \
         qkass.ui \
     tools/asstt.ui \
-    tools/ass2text.ui
+    tools/ass2text.ui \
+    tools/ass2lrc.ui
 
 RESOURCES += \
     res.qrc
@@ -50,3 +56,8 @@ RESOURCES += \
 RC_FILE = main.rc
 
 DISTFILES +=
+
+TRANSLATIONS += \
+        trans/default.ts \
+        trans/chinese.ts \
+        trans/japanese.ts

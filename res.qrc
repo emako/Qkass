@@ -31,5 +31,12 @@
         <file>res/properties.png</file>
         <file>res/text.ico</file>
         <file>res/tt.ico</file>
+        <file>res/trill_smallest.png</file>
+        <file>res/trill.ico</file>
+        <file>res/lang/chinese.ico</file>
+        <file>res/lang/def.ico</file>
+        <file>res/lang/english.ico</file>
+        <file>res/lang/japanese.ico</file>
+        <file>res/lang/lang_menu.png</file>
     </qresource>
 </RCC>

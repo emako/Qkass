@@ -1,11 +1,28 @@
 #include "qkass.h"
+#include "com/common.h"
+#include "com/tag.h"
+
 #include <QApplication>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Qkass w;
-    w.show();
-
-    return a.exec();
+    QTranslator qtTranslator;
+    qtTranslator.load(Common::loadTrans());
+    a.installTranslator(&qtTranslator);
+    int ret = QT_RETCODE_DEFAULT;
+    while(true)
+    {
+        qtTranslator.load(Common::loadTransConfig());
+        a.installTranslator(&qtTranslator);
+        Qkass w;
+        w.show();
+        ret = a.exec();
+        if(ret != QT_RETCODE_RESTART)
+        {
+            break;
+        }
+    }
+    return ret;
 }

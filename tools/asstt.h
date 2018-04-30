@@ -1,7 +1,8 @@
 #ifndef ASSTT_H
 #define ASSTT_H
 
-#include "tag.h"
+#include "com/tag.h"
+#include "com/common.h"
 
 #include <QWidget>
 #include <QTime>
